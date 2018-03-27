@@ -76,7 +76,6 @@ Depending on your project's setup, it may make sense to write some custom grunt 
 * `node-pg-migrate up {N}` - runs N up migrations from the current state.
 * `node-pg-migrate down` - runs a single down migration.
 * `node-pg-migrate down {N}` - runs N down migrations from the current state.
-* `node-pg-migrate unlock` - unlocks migrations (if previous up/down migration failed and was not automatically unlocked).
 * `node-pg-migrate redo` - redoes last migration (runs a single down migration, then single up migration).
 * `node-pg-migrate redo {N}` - redoes N last migrations (runs N down migrations, then N up migrations).
 
@@ -120,10 +119,7 @@ Available options are:
 
 ### Locking
 
-`node-pg-migrate` automatically checks if no other migration is running. To do so, it locks the migration table and enters comment there.
-There are other options how to do it, but I choose this one (see [#88](https://github.com/salsita/node-pg-migrate/pull/88)).
-In some circumstances it is possible that lock will not be released (Error message - `Error: Unable to fetch migrations: Error: Another migration is already running`).
-In that case you need to run `node-pg-migrate unlock` to release the lock again.
+`node-pg-migrate` automatically checks if no other migration is running. To do so, it uses an [advisory lock](https://www.postgresql.org/docs/current/static/explicit-locking.html#id-1.5.12.6.9.2). 
 
 ## Transpiling Babel or Typescript
 
